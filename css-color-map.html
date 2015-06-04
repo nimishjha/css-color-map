@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CSS Color Map</title>
+<style type="text/css">
+html, body { background: #333; color: #CCC; font-family: Verdana; font-size: 12px; }
+h1, h2, h3 { padding: 10px 0; margin: 0; font-weight: normal; font-family: Calibri, Helvetica, sans-serif; }
+h1 { color: #FFF; }
+h2 { padding: 10px 20px; background: #181818; }
+body { padding: 20px 100px; }
+* { box-sizing: border-box; }
+a { text-decoration: none; }
+#t { width: 100%; margin: 0 auto; height: 100px; display: block; background: #282828; color: #999; font: 12px Verdana; border: 0; padding: 10px; box-shadow: inset 0 0 5px #000; }
+#t:focus { background: #202020; }
+button { display: block; width: 100%; height: 50px; border: 0; outline: 0; background: #111; color: #999; font-size: 24px; }
+button:hover { background: #000; }
+#colorDivContainer { background: #777 url("transparentgrid.png"); }
+.colorDiv { height: 30px; position: relative; }
+.colorDiv2 { height: 30px; position: relative; background: #000; padding-left: 420px; }
+.colorDiv2:after { content: "This is the text color"; padding: 5px 0 0 0; display: block; }
+.colorDiv span { background: #222; color: #AAA; font: 12px verdana; line-height: 30px; display: block; width: 400px; padding: 0 0 0 20px; position: absolute; left: 0; top: 0; }
+.colorDiv2 span { background: #222; color: #AAA; font: 12px verdana; line-height: 30px; display: block; width: 400px; padding: 0 0 0 20px; position: absolute; left: 0; top: 0; }
+#credit { text-align: right; color: #777; padding: 20px 10px; }
+#credit a { color: #999; }
+#credit a:hover { color: #FFF; }
+</style>
+</head>
+<body>
+
+<h1>CSS Color Map</h1>
+<p>This utility displays a map of all the background and foreground colors in a CSS file. Useful for spotting something that shouldn't be there, or just to see the color scheme at a glance. Paste your CSS into the textarea below and click "Go".</p>
+
+<textarea id="t"></textarea>
+<button onclick="showValue()">Go</button>
+<div id="colorDivContainer">
+</div> <!-- end colorDivContainer -->
+
+<div id="credit">
+	<p>by <a href="http://www.nimishjha.com">Nimish Jha</a></p>
+</div> <!-- end credit -->
+
+<script type="text/javascript">
+
+function isArray(o)
+{
+	return Object.prototype.toString.call(o) === '[object Array]';
+}
+
+function del(c)
+{
+	var todel = [];
+	if (isArray(c))
+	{
+		for (var i = 0, ii = c.length; i < ii; i++)
+		{
+			del(c[i]);
+		}
+	}
+	else
+	{
+		var f = get(c);
+		if (f && f.length)
+		{
+			for (var j = 0, jj = f.length; j < jj; j++)
+			todel.push(f[j]);
+			for (j = todel.length - 1; j > -1; j--)
+			{
+				todel[j].parentNode.removeChild(todel[j]);
+			}
+		}
+		else if (f)
+		{
+			if (f.parentNode) f.parentNode.removeChild(f);
+		}
+	}
+}
+
+function get(s)
+{
+	s = s.toString();
+	var t = s.substr(1, s.length - 1);
+	if (s.indexOf("#") === 0) return document.getElementById(t);
+	else if (s.indexOf(".") === 0) return document.getElementsByClassName(t);
+	else if (document.getElementsByTagName(s).length) return document.getElementsByTagName(s);
+	else return 0;
+}
+
+function xlog(str, elem, prepend)
+{
+	if (elem) var d = document.createElement(elem);
+	else d = document.createElement("h6");
+	d.className = "xlog";
+	d.innerHTML = str;
+	if(prepend)
+		document.body.insertBefore(d, document.body.firstChild);
+	else
+		document.body.appendChild(d);
+}
+
+function showValue()
+{
+	del(".colorDiv");
+	var  e = get("#t").value;
+	var arr = e.match(/(background|background-color)\s*:[^;}]*/g);
+	var f = get("#colorDivContainer");
+	f.innerHTML = "<h2>Background colors</h2>";
+	for(var i = 0, ii = arr.length; i < ii; i++)
+	{
+		var x = document.createElement("div");
+		x.className = "colorDiv";
+		x.innerHTML = "<span>" + arr[i] + "<span>";
+		x.style = arr[i];
+		f.appendChild(x);
+	}
+	f.innerHTML += "<h2>Foreground colors</h2>";
+	arr = e.match(/color?:[^;}]*/g);
+	for(var i = 0, ii = arr.length; i < ii; i++)
+	{
+		var x = document.createElement("div");
+		x.className = "colorDiv2";
+		x.innerHTML = "<span>" + arr[i] + "<span>";
+		x.style = arr[i];
+		f.appendChild(x);
+	}
+}
+</script>
+
+</body>
+</html>
