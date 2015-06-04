@@ -31,7 +31,13 @@ button:hover { background: #000; }
 <h1>CSS Color Map</h1>
 <p>This utility displays a map of all the background and foreground colors in a CSS file. Useful for spotting something that shouldn't be there, or just to see the color scheme at a glance. Paste your CSS into the textarea below and click "Go".</p>
 
-<textarea id="t"></textarea>
+<textarea id="t">
+body { background: #036; color: #FFF; }
+#wrapper { background: #058; color: #ACE; }
+#header { background: rgba(0, 50, 100, 0.6); }
+.error { background: #800; color: #FFF; }
+.warning { background: #520; color: #F90; }
+</textarea>
 <button onclick="showValue()">Go</button>
 <div id="colorDivContainer">
 </div> <!-- end colorDivContainer -->
